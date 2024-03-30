@@ -6,6 +6,9 @@ tmp1            := $0000
 tmp2            := $0001
 tmp3            := $0002
 tmpBulkCopyToPpuReturnAddr:= $0005
+currentTile     := $0009
+nextTile        := $000A
+tileOverFlow    := $000B    ; used when rng_seed+1 % 4 == 3
 patchToPpuAddr  := $0014
 rng_seed        := $0017
 spawnID         := $0019
@@ -540,7 +543,7 @@ gameMode_legalScreen:
         ldy     #>oamStaging
         jsr     memset_page
 .if NWC <> 1
-        lda     #LEGAL_SLEEP_TIME
+        lda     #$00
         jsr     sleep_for_a_vblanks
         lda     #LEGAL_SLEEP_TIME
         sta     generalCounter
@@ -1239,14 +1242,14 @@ gameModeState_initGameState:
         lda     #INITIAL_AUTOREPEAT_Y
         sta     player1_autorepeatY
         sta     player2_autorepeatY
-        jsr     chooseNextTetrimino
+        jsr     chooseNextTetriminoAndTile
         sta     player1_currentPiece
         sta     player2_currentPiece
         jsr     incrementPieceStat
         ldx     #rng_seed
         ldy     #$02
         jsr     generateNextPseudorandomNumber
-        jsr     chooseNextTetrimino
+        jsr     chooseNextTetriminoAndTile
         sta     nextPiece
         sta     twoPlayerPieceDelayPiece
         lda     gameType
@@ -1675,11 +1678,11 @@ stageSpriteForCurrentPiece:
         lda     numberOfPlayers
         cmp     #$01
         beq     @calculateYPixel
-        lda     generalCounter3
-        sec
-        sbc     #$40
-        sta     generalCounter3 ; if 2 player mode, player 1's field is more to the left
-        lda     activePlayer
+        ; lda     generalCounter3
+        ; sec
+        ; sbc     #$40
+        ; sta     generalCounter3 ; if 2 player mode, player 1's field is more to the left
+        ; lda     activePlayer
         cmp     #$01
         beq     @calculateYPixel
         lda     generalCounter3
@@ -1718,7 +1721,15 @@ stageSpriteForCurrentPiece:
         inc     oamStagingLength
         iny
         inx
-        lda     orientationTable,x
+        lda     currentPiece
+        cmp     #hidden
+        bne     @normalTile
+        lda     #tileEmpty
+        bne     @storeTile
+@normalTile:
+        lda     currentTile
+@storeTile:
+        ; lda     orientationTable,x
         sta     oamStaging,y ; stage block type of mino
         inc     oamStagingLength
         iny
@@ -1756,7 +1767,7 @@ stageSpriteForCurrentPiece:
         bne     @stageMino
         rts
 
-orientationTable:
+orientationTable: ; val=0x8A9C
         ; y offset, tile ID, x offset per mino per orientation
         .byte    0, tile1,-1, 0, tile1, 0, 0, tile1, 1,-1, tile1, 0 ; $00 t up
         .byte   -1, tile1, 0, 0, tile1, 0, 0, tile1, 1, 1, tile1, 0 ; $01 t right
@@ -1839,7 +1850,7 @@ stageSpriteForNextPiece:
         ldx     nextPiece
         lda     orientationToSpriteTable,x
         sta     spriteIndexInOamContentLookup
-        jmp     loadSpriteIntoOamStaging
+        jmp     loadNextPieceIntoOamStaging
 
 @ret:   rts
 
@@ -2938,7 +2949,7 @@ playState_spawnNextTetrimino:
         jmp     @resetDownHold
 
 @onePlayerPieceSelection:
-        jsr     chooseNextTetrimino
+        jsr     chooseNextTetriminoAndTile
         sta     nextPiece
 @resetDownHold:
         lda     #$00
@@ -3115,7 +3126,8 @@ playState_lockTetrimino:
         clc
         adc     selectingLevelOrHeight
         tay
-        lda     generalCounter5
+        ; lda     generalCounter5
+        lda     currentTile
         sta     (playfieldAddr),y
         inx
         dec     generalCounter3
@@ -5465,25 +5477,25 @@ copyAddrAtReturnAddressToTmp_incrReturnAddrBy2:
         rts
 
 ;reg x: zeropage addr of seed; reg y: size of seed
-generateNextPseudorandomNumber:
+generateNextPseudorandomNumber: 
         lda     tmp1,x
-        and     #$02
-        sta     tmp1
-        lda     tmp2,x
-        and     #$02
-        eor     tmp1
-        clc
-        beq     @updateNextByteInSeed
-        sec
-@updateNextByteInSeed:
+        eor     tmp2,x
+        lsr
+        lsr
         ror     tmp1,x
-        inx
-        dey
-        bne     @updateNextByteInSeed
+        ror     tmp2,x
+        lda     tileOverFlow
+        sbc     #$00
+        bpl     @noReset
+        lda     #$02
+@noReset:
+        sta     tileOverFlow
         rts
+        nop
+        nop
 
 ; canon is initializeOAM
-copyOamStagingToOam:
+copyOamStagingToOam: ; val=0xAB5E
         lda     #$00
         sta     OAMADDR
         lda     #$02
@@ -5831,13 +5843,76 @@ type_a_ending_nametable:
 .segment        "unreferenced_data1": absolute
 
 unreferenced_data1:
-.if PAL = 1
-        .incbin "data/unreferenced_data1_pal.bin"
-.elseif NWC = 1
-        .include "data/unreferenced_data1_nwc.asm"
-.else
-        .incbin "data/unreferenced_data1.bin"
-.endif
+chooseNextTetriminoAndTile:
+        lda nextTile
+        sta currentTile
+        lda rng_seed+1
+        lsr
+        lsr
+        and #$03
+        cmp #$03
+        bne @storeTile
+        lda tileOverFlow
+@storeTile:
+        tax
+        lda tiles,x
+        sta nextTile
+        jmp chooseNextTetrimino
+
+tiles:
+        .byte $7B,$7C,$7D
+
+loadNextPieceIntoOamStaging:
+        clc
+        lda     spriteIndexInOamContentLookup
+        rol     a
+        tax
+        lda     oamContentLookup,x
+        sta     generalCounter
+        inx
+        lda     oamContentLookup,x
+        sta     generalCounter2
+        ldx     oamStagingLength
+        ldy     #$00
+@whileNotFF:
+        lda     (generalCounter),y
+        cmp     #$FF
+        beq     @ret
+        clc
+        adc     spriteYOffset
+        sta     oamStaging,x
+        inx
+        iny
+        ; lda     (generalCounter),y
+        lda     nextTile
+        sta     oamStaging,x
+        inx
+        iny
+        lda     (generalCounter),y
+        sta     oamStaging,x
+        inx
+        iny
+        lda     (generalCounter),y
+        clc
+        adc     spriteXOffset
+        sta     oamStaging,x
+        inx
+        iny
+        lda     #$04
+        clc
+        adc     oamStagingLength
+        sta     oamStagingLength
+        jmp     @whileNotFF
+
+@ret:   rts
+
+; .if PAL = 1
+;         .incbin "data/unreferenced_data1_pal.bin"
+; .elseif NWC = 1
+;         .include "data/unreferenced_data1_nwc.asm"
+; .else
+;         .incbin "data/unreferenced_data1.bin"
+; .endif
 
 ; End of "unreferenced_data1" segment
 .code
