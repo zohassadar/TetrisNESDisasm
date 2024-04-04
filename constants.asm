@@ -61,6 +61,10 @@ RENDER_SCORE := $04
 RENDER_LEVEL := $02
 RENDER_LINES := $01
 
+.if TRIPLE = 1
+PAL = 1
+.endif
+
 .ifndef PAL
 PAL = 0
 .endif

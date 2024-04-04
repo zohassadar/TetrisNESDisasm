@@ -242,7 +242,12 @@ initMagic       := $0750                        ; Initialized to a hard-coded nu
 .segment        "PRG_chunk1": absolute
 
 ; incremented to reset MMC1 reg
-initRam:ldx     #$00
+initRam:
+.if TRIPLE=1
+        .byte   $05,$80
+.else
+        ldx     #$00
+.endif
         jmp     initRamContinued
 
 nmi:    pha
@@ -271,6 +276,11 @@ nmi:    pha
         ldx     #rng_seed
         ldy     #$02
         jsr     generateNextPseudorandomNumber
+.endif
+.if TRIPLE = 1
+        lda     #$90
+        sta     currentPpuCtrl
+        sta     PPUCTRL
 .endif
         lda     #$00
         sta     ppuScrollX
@@ -523,9 +533,17 @@ gameMode_legalScreen:
         jsr     updateAudioWaitForNmiAndDisablePpuRendering
         jsr     disableNmi
         lda     #CHR_TITLE_MENU
+.if TRIPLE = 1
+        jsr     setMMC1Control
+.else
         jsr     changeCHRBank0
+.endif
         lda     #CHR_TITLE_MENU
+.if TRIPLE = 1
+        jsr     changeCHRBank0
+.else
         jsr     changeCHRBank1
+.endif
         jsr     bulkCopyToPpu
         .addr   legal_screen_palette
         jsr     bulkCopyToPpu
@@ -570,9 +588,17 @@ gameMode_titleScreen:
         sta     currentPpuCtrl
 .else
         lda     #CHR_TITLE_MENU
+.if TRIPLE = 1
+        jsr     setMMC1Control
+.else
         jsr     changeCHRBank0
-        lda     #CHR_TITLE_MENU
+.endif
+        lda     #CHR_TITLE_MENU 
+.if TRIPLE = 1
+        jsr     changeCHRBank0
+.else
         jsr     changeCHRBank1
+.endif
 .endif
         jsr     bulkCopyToPpu
         .addr   menu_palette
@@ -658,7 +684,11 @@ gameMode_gameTypeMenu:
 .if NWC <> 1
         inc     initRam
         lda     #MMC1_4KCHR_32KPRG_H_MIRROR
+.if TRIPLE = 1
+        jsr     skipMMC1Control
+.else
         jsr     setMMC1Control
+.endif
 .endif
         lda     #$01
         sta     renderMode
@@ -670,9 +700,17 @@ gameMode_gameTypeMenu:
         jsr     bulkCopyToPpu
         .addr   game_type_menu_nametable
         lda     #CHR_TITLE_MENU
+.if TRIPLE = 1
+        jsr     setMMC1Control
+.else
         jsr     changeCHRBank0
+.endif
         lda     #CHR_TITLE_MENU
+.if TRIPLE = 1
+        jsr     changeCHRBank0
+.else
         jsr     changeCHRBank1
+.endif
         jsr     waitForVBlankAndEnableNmi
         jsr     updateAudioWaitForNmiAndResetOamStaging
         jsr     updateAudioWaitForNmiAndEnablePpuRendering
@@ -800,7 +838,11 @@ gameMode_levelMenu:
 .if NWC <> 1
         inc     initRam
         lda     #MMC1_4KCHR_32KPRG_H_MIRROR
+.if TRIPLE = 1
+        jsr     skipMMC1Control
+.else
         jsr     setMMC1Control
+.endif
         jsr     updateAudio2
 .endif
         lda     #$01
@@ -809,9 +851,17 @@ gameMode_levelMenu:
         jsr     updateAudioWaitForNmiAndDisablePpuRendering
         jsr     disableNmi
         lda     #CHR_TITLE_MENU
+.if TRIPLE = 1
+        jsr     setMMC1Control
+.else
         jsr     changeCHRBank0
+.endif
         lda     #CHR_TITLE_MENU
+.if TRIPLE = 1
+        jsr     changeCHRBank0
+.else
         jsr     changeCHRBank1
+.endif
         jsr     bulkCopyToPpu
         .addr   menu_palette
         jsr     bulkCopyToPpu
@@ -1098,9 +1148,17 @@ gameModeState_initGameBackground:
         sta     currentPpuCtrl
 .endif
         lda     #CHR_GAME
+.if TRIPLE = 1
+        jsr     setMMC1Control
+.else
         jsr     changeCHRBank0
+.endif
         lda     #CHR_GAME
+.if TRIPLE = 1
+        jsr     changeCHRBank0
+.else
         jsr     changeCHRBank1
+.endif
         jsr     bulkCopyToPpu
         .addr   game_palette
         jsr     bulkCopyToPpu
@@ -1439,10 +1497,12 @@ rngTable:
         .byte   tileEmpty,tile1,tileEmpty,tile2
         .byte   tile3,tile3,tileEmpty,tileEmpty
 gameModeState_updateCountersAndNonPlayerState:
+.if TRIPLE <> 1
         lda     #CHR_GAME
         jsr     changeCHRBank0
         lda     #CHR_GAME
         jsr     changeCHRBank1
+.endif
         lda     #$00
         sta     oamStagingLength
         inc     player1_fallTimer
@@ -1461,6 +1521,8 @@ gameModeState_updateCountersAndNonPlayerState:
 .endif
 @ret:   inc     gameModeState
         rts
+
+
 
 rotate_tetrimino:
         lda     currentPiece
@@ -3827,9 +3889,17 @@ endingAnimationB:
         bne     @checkPenguinOrOstrichEnding
         ; castle ending for level 9/19
         lda     #CHR_TYPEB_ENDING
+.if TRIPLE = 1
+        jsr     setMMC1Control
+.else
         jsr     changeCHRBank0
+.endif
         lda     #CHR_TYPEB_ENDING
+.if TRIPLE = 1
+        jsr     changeCHRBank0
+.else
         jsr     changeCHRBank1
+.endif
         jsr     bulkCopyToPpu
         .addr   type_b_lvl9_ending_nametable
         jmp     @startAnimation
@@ -3844,9 +3914,17 @@ endingAnimationB:
         ldx     #CHR_TYPEA_ENDING
 @normalEnding:
         txa
+.if TRIPLE = 1
+        jsr     setMMC1Control
+.else
         jsr     changeCHRBank0
+.endif
         lda     #CHR_TYPEA_ENDING
+.if TRIPLE = 1
+        jsr     changeCHRBank0
+.else
         jsr     changeCHRBank1
+.endif
         jsr     bulkCopyToPpu
         .addr   type_b_ending_nametable
 @startAnimation:
@@ -4280,7 +4358,11 @@ highScoreEntryScreen:
 .else
         lda     #MMC1_4KCHR_32KPRG_H_MIRROR
 .endif
+.if TRIPLE = 1
+        jsr     skipMMC1Control
+.else
         jsr     setMMC1Control
+.endif
         lda     #$09
         jsr     setMusicTrack
         lda     #$02
@@ -4288,9 +4370,17 @@ highScoreEntryScreen:
         jsr     updateAudioWaitForNmiAndDisablePpuRendering
         jsr     disableNmi
         lda     #CHR_TITLE_MENU
+.if TRIPLE = 1
+        jsr     setMMC1Control
+.else
         jsr     changeCHRBank0
+.endif
         lda     #CHR_TITLE_MENU
+.if TRIPLE = 1
+        jsr     changeCHRBank0
+.else
         jsr     changeCHRBank1
+.endif
         jsr     bulkCopyToPpu
         .addr   menu_palette
         jsr     bulkCopyToPpu
@@ -5166,9 +5256,15 @@ endingAnimationA:
         jsr     updateAudioWaitForNmiAndDisablePpuRendering
         jsr     disableNmi
         lda     #CHR_TYPEA_ENDING
-        jsr     changeCHRBank0
+.if TRIPLE = 1
+        jsr     setMMC1Control
+.endif
         lda     #CHR_TYPEA_ENDING
+.if TRIPLE = 1
+        jsr     changeCHRBank0
+.else
         jsr     changeCHRBank1
+.endif 
         jsr     bulkCopyToPpu
         .addr   type_a_ending_nametable
         jsr     bulkCopyToPpu
@@ -5667,6 +5763,7 @@ switch_s_plus_2a:
         stx     tmp1
         jmp     (tmp1)
 
+.if TRIPLE <> 1
 .if NWC <> 1
         sei
 .endif
@@ -5678,10 +5775,28 @@ switch_s_plus_2a:
 .endif
         jsr     setMMC1Control
         rts
-
+.endif
+skipMMC1Control:
         rts
 
 setMMC1Control:
+.if TRIPLE = 1
+        STA $35
+        LDA #$00
+        STA $8000
+        LDA $35
+        ASL A
+        ASL A
+        ADC #$68
+        STA $8001
+        LDA #$01
+        STA $8000
+        LDA $35
+        ASL A
+        ASL A
+        ADC #$6A
+        STA $8001
+.else
         sta     MMC1_Control
         lsr     a
         sta     MMC1_Control
@@ -5691,12 +5806,44 @@ setMMC1Control:
         sta     MMC1_Control
         lsr     a
         sta     MMC1_Control
+.endif
         rts
 
 changeCHRBank0:
 .if NWC = 1
         rts
 .endif
+.if TRIPLE = 1
+        STA $35
+        LDA #$02
+        STA $8000
+        LDA $35
+        ASL A
+        ASL A
+        ADC #$68
+        STA $8001
+        LDA #$03
+        STA $8000
+        LDA $35
+        ASL A
+        ASL A
+        ADC #$69
+        STA $8001
+        LDA #$04
+        STA $8000
+        LDA $35
+        ASL A
+        ASL A
+        ADC #$6A
+        STA $8001
+        LDA #$05
+        STA $8000
+        LDA $35
+        ASL A
+        ASL A
+        ADC #$6B
+        STA $8001
+.else
         sta     MMC1_CHR0
         lsr     a
         sta     MMC1_CHR0
@@ -5706,12 +5853,24 @@ changeCHRBank0:
         sta     MMC1_CHR0
         lsr     a
         sta     MMC1_CHR0
+.endif
         rts
 
 changeCHRBank1:
 .if NWC = 1
         rts
 .endif
+.if TRIPLE = 1
+        LDA #$06
+        STA $8000
+        LDA #$04
+        STA $8001
+        LDA #$07
+        STA $8000
+        LDA #$05
+        STA $8001
+
+.else
         sta     MMC1_CHR1
         lsr     a
         sta     MMC1_CHR1
@@ -5721,9 +5880,11 @@ changeCHRBank1:
         sta     MMC1_CHR1
         lsr     a
         sta     MMC1_CHR1
+.endif
         rts
 
 changePRGBank:
+.if TRIPLE <> 1
 .if NWC = 1
         rts
 .endif
@@ -5737,6 +5898,7 @@ changePRGBank:
         lsr     a
         sta     MMC1_PRG
         rts
+.endif
 
 game_palette:
         .byte   $3F,$00,$20,$0F,$30,$12,$16,$0F
@@ -5831,7 +5993,9 @@ type_a_ending_nametable:
 .segment        "unreferenced_data1": absolute
 
 unreferenced_data1:
-.if PAL = 1
+.if TRIPLE = 1
+        .incbin "data/unreferenced_data1_triple.bin"
+.elseif PAL = 1
         .incbin "data/unreferenced_data1_pal.bin"
 .elseif NWC = 1
         .include "data/unreferenced_data1_nwc.asm"
@@ -5995,6 +6159,8 @@ unreferenced_data3:
         .byte   $B5,$1E,$F0,$38,$B5,$1E,$A8,$0A
         .byte   $90,$07,$B5,$1E,$09,$40,$4C,$FC
         .byte   $E0,$B9,$B9,$DF,$95,$1E,$B5,$CF
+.elseif TRIPLE = 1
+        .incbin "data/unreferenced_data3_triple.bin"
 .else
         .byte   $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
         .byte   $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF

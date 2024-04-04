@@ -26,7 +26,7 @@ tetris:= tetris.nes
 .PHONY: clean compare tools
 
 
-CAFLAGS = -g
+CAFLAGS = -g -D TRIPLE=1
 LDFLAGS =
 
 compare: $(tetris)
