@@ -12,6 +12,7 @@ spawnID         := $0019
 spawnCount      := $001A
 verticalBlankingInterval:= $0033
 unused_0E       := $0034                              ; Always $0E
+cheatTriggered  := $0035
 
 .if NWC = 1
 
@@ -469,7 +470,7 @@ gameMode_playAndEndingHighScore:
         .addr   gameModeState_updatePlayer1
         .addr   gameModeState_updatePlayer2
         .addr   gameModeState_checkForResetKeyCombo
-        .addr   gameModeState_startButtonHandling
+        .addr   gameModeState_checkForUpThenStartButtonHandling
         .addr   gameModeState_vblankThenRunState2
 branchOnPlayStatePlayer1:
         lda     playState
@@ -2938,7 +2939,7 @@ playState_spawnNextTetrimino:
         jmp     @resetDownHold
 
 @onePlayerPieceSelection:
-        jsr     chooseNextTetrimino
+        jsr     chooseNextTetriminoCheat
         sta     nextPiece
 @resetDownHold:
         lda     #$00
@@ -5996,10 +5997,23 @@ unreferenced_data3:
         .byte   $90,$07,$B5,$1E,$09,$40,$4C,$FC
         .byte   $E0,$B9,$B9,$DF,$95,$1E,$B5,$CF
 .else
-        .byte   $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
-        .byte   $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
-        .byte   $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
-        .byte   $00,$00,$00,$00,$00,$00,$00,$00
+chooseNextTetriminoCheat:
+        jsr     chooseNextTetrimino
+        ldx     cheatTriggered
+        beq     @ret
+        lda     #iHoriz
+@ret:
+        ldx     #$00
+        stx     cheatTriggered
+        rts
+gameModeState_checkForUpThenStartButtonHandling:
+        lda     newlyPressedButtons_player1
+        and     #BUTTON_UP
+        beq     @ret
+        inc     cheatTriggered
+@ret:
+        jmp     gameModeState_startButtonHandling
+        .byte   $00,$00,$00,$00,$00,$00,$00
         .byte   $00,$00,$00,$00,$00,$00,$00,$00
         .byte   $00,$00,$00,$00,$00,$00,$00,$00
         .byte   $00,$00,$00,$00,$00,$00,$00,$00
