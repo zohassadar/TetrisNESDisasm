@@ -1724,7 +1724,7 @@ stageSpriteForCurrentPiece:
         inc     oamStagingLength
         iny
         inx
-        lda     #$02
+        lda     #$03
         sta     oamStaging,y ; stage palette/front priority
         lda     originalY
         cmp     #$2F ; compares with smallest allowed y position on the screen, not the field
@@ -1780,7 +1780,7 @@ orientationTable:
         .byte   -1, $D3, 0, 0, $D4, 0, 1, $DC, 0, 1, $D2, 1 ; $0D l right
         .byte    0, $D9,-1, 0, $D1, 0, 0, $D2, 1, 1, $D5,-1 ; $0E l down (spawn)
         .byte   -1, $D0,-1,-1, $DB, 0, 0, $D4, 0, 1, $D5, 0 ; $0F l left
-        .byte   -1, $D3, 1, 0, $DC,-1, 0, $D1, 0, 0, $D2, 1 ; $10 l up
+        .byte   -1, $D3, 1, 0, $D0,-1, 0, $D1, 0, 0, $DD, 1 ; $10 l up
 
         .byte   -2, $C3, 0,-1, $C4, 0, 0, $C4, 0, 1, $C5, 0 ; $11 i vertical
         .byte    0, $C0,-2, 0, $C1,-1, 0, $C1, 0, 0, $C2, 1 ; $12 i horizontal (spawn)
@@ -2013,32 +2013,32 @@ sprite05PausePalette4:
         .byte   $00,$1E,$00,$10,$00,$1C,$00,$18
         .byte   $00,$0E,$00,$20,$FF
 sprite06TPiece:
-        .byte   $00,$C0,$02,$FC,$00,$C8,$02,$04
-        .byte   $00,$C2,$02,$0C,$08,$C5,$02,$04
+        .byte   $00,$C0,$03,$FC,$00,$C8,$03,$04
+        .byte   $00,$C2,$03,$0C,$08,$C5,$03,$04
         .byte   $FF
 sprite07SPiece:
-        .byte   $00,$E9,$02,$04,$00,$E2,$02,$0C
-        .byte   $08,$EE,$02,$FC,$08,$ED,$02,$04
+        .byte   $00,$E9,$03,$04,$00,$E2,$03,$0C
+        .byte   $08,$EE,$03,$FC,$08,$ED,$03,$04
         .byte   $FF
 sprite08ZPiece:
-        .byte   $00,$D0,$02,$FC,$00,$DB,$02,$04
-        .byte   $08,$DC,$02,$04,$08,$D2,$02,$0C
+        .byte   $00,$D0,$03,$FC,$00,$DB,$03,$04
+        .byte   $08,$DC,$03,$04,$08,$D2,$03,$0C
         .byte   $FF
 sprite09JPiece:
-        .byte   $00,$E0,$02,$FC,$00,$E1,$02,$04
-        .byte   $00,$EB,$02,$0C,$08,$E5,$02,$0C
+        .byte   $00,$E0,$03,$FC,$00,$E1,$03,$04
+        .byte   $00,$EB,$03,$0C,$08,$E5,$03,$0C
         .byte   $FF
 sprite0ALPiece:
-        .byte   $00,$D9,$02,$FC,$00,$D1,$02,$04
-        .byte   $00,$D2,$02,$0C,$08,$D5,$02,$FC
+        .byte   $00,$D9,$03,$FC,$00,$D1,$03,$04
+        .byte   $00,$D2,$03,$0C,$08,$D5,$03,$FC
         .byte   $FF
 sprite0BOPiece:
-        .byte   $00,$CA,$02,$00,$00,$CB,$02,$08
-        .byte   $08,$CC,$02,$00,$08,$CD,$02,$08
+        .byte   $00,$CA,$03,$00,$00,$CB,$03,$08
+        .byte   $08,$CC,$03,$00,$08,$CD,$03,$08
         .byte   $FF
 sprite0CIPiece:
-        .byte   $04,$C0,$02,$F8,$04,$C1,$02,$00
-        .byte   $04,$C1,$02,$08,$04,$C2,$02,$10
+        .byte   $04,$C0,$03,$F8,$04,$C1,$03,$00
+        .byte   $04,$C1,$03,$08,$04,$C2,$03,$10
         .byte   $FF
 sprite0EHighScoreNameCursor:
         .byte   $00,$FC,$21,$00,$FF
