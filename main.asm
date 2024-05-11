@@ -1759,31 +1759,31 @@ stageSpriteForCurrentPiece:
 
 orientationTable:
         ; y offset, tile ID, x offset per mino per orientation
-        .byte    0, $CE,-1, 0, $C6, 0, 0, $C2, 1,-1, $C3, 0 ; $00 t up
-        .byte   -1, $C3, 0, 0, $C7, 0, 0, $C2, 1, 1, $C5, 0 ; $01 t right
-        .byte    0, $C0,-1, 0, $C8, 0, 0, $C2, 1, 1, $C5, 0 ; $02 t down (spawn)
-        .byte   -1, $C3, 0, 0, $CE,-1, 0, $C9, 0, 1, $C5, 0 ; $03 t left
+        .byte    0, $78,-1, 0, $C6, 0, 0, $7A, 1,-1, $67, 0 ; $00 t up
+        .byte   -1, $67, 0, 0, $C7, 0, 0, $7A, 1, 1, $87, 0 ; $01 t right
+        .byte    0, $78,-1, 0, $C8, 0, 0, $7A, 1, 1, $87, 0 ; $02 t down (spawn)
+        .byte   -1, $67, 0, 0, $78,-1, 0, $C9, 0, 1, $87, 0 ; $03 t left
 
-        .byte   -1, $E3, 0, 0, $E4, 0, 1, $EE,-1, 1, $ED, 0 ; $04 j left
-        .byte   -1, $E3,-1, 0, $EC,-1, 0, $E1, 0, 0, $E2, 1 ; $05 j up
-        .byte   -1, $E9, 0,-1, $E2, 1, 0, $E4, 0, 1, $E5, 0 ; $06 j right
-        .byte    0, $E0,-1, 0, $E1, 0, 0, $EB, 1, 1, $E5, 1 ; $07 j down (spawn)
+        .byte   -1, $67, 0, 0, $77, 0, 1, $78,-1, 1, $83, 0 ; $04 j left
+        .byte   -1, $67,-1, 0, $EC,-1, 0, $79, 0, 0, $7A, 1 ; $05 j up
+        .byte   -1, $E9, 0,-1, $7A, 1, 0, $77, 0, 1, $87, 0 ; $06 j right
+        .byte    0, $78,-1, 0, $79, 0, 0, $EB, 1, 1, $87, 1 ; $07 j down (spawn)
 
-        .byte    0, $D0,-1, 0, $DB, 0, 1, $DC, 0, 1, $D2, 1 ; $08 z horizontal (spawn)
-        .byte   -1, $D3, 1, 0, $DA, 0, 0, $DD, 1, 1, $D5, 0 ; $09 z vertical
+        .byte    0, $78,-1, 0, $DB, 0, 1, $DC, 0, 1, $7A, 1 ; $08 z horizontal (spawn)
+        .byte   -1, $67, 1, 0, $DA, 0, 0, $DD, 1, 1, $87, 0 ; $09 z vertical
 
         .byte    0, $CA,-1, 0, $CB, 0, 1, $CC,-1, 1, $CD, 0 ; $0A o (spawn)
 
-        .byte    0, $E9, 0, 0, $E2, 1, 1, $EE,-1, 1, $ED, 0 ; $0B s horizontal (spawn)
-        .byte   -1, $E3, 0, 0, $EC, 0, 0, $EB, 1, 1, $E5, 1 ; $0C s vertical
+        .byte    0, $E9, 0, 0, $7A, 1, 1, $78,-1, 1, $ED, 0 ; $0B s horizontal (spawn)
+        .byte   -1, $67, 0, 0, $EC, 0, 0, $EB, 1, 1, $87, 1 ; $0C s vertical
 
-        .byte   -1, $D3, 0, 0, $D4, 0, 1, $DC, 0, 1, $D2, 1 ; $0D l right
-        .byte    0, $D9,-1, 0, $D1, 0, 0, $D2, 1, 1, $D5,-1 ; $0E l down (spawn)
-        .byte   -1, $D0,-1,-1, $DB, 0, 0, $D4, 0, 1, $D5, 0 ; $0F l left
-        .byte   -1, $D3, 1, 0, $D0,-1, 0, $D1, 0, 0, $DD, 1 ; $10 l up
+        .byte   -1, $67, 0, 0, $77, 0, 1, $DC, 0, 1, $7A, 1 ; $0D l right
+        .byte    0, $D9,-1, 0, $79, 0, 0, $7A, 1, 1, $87,-1 ; $0E l down (spawn)
+        .byte   -1, $78,-1,-1, $DB, 0, 0, $77, 0, 1, $87, 0 ; $0F l left
+        .byte   -1, $67, 1, 0, $78,-1, 0, $79, 0, 0, $DD, 1 ; $10 l up
 
-        .byte   -2, $C3, 0,-1, $C4, 0, 0, $C4, 0, 1, $C5, 0 ; $11 i vertical
-        .byte    0, $C0,-2, 0, $C1,-1, 0, $C1, 0, 0, $C2, 1 ; $12 i horizontal (spawn)
+        .byte   -2, $67, 0,-1, $77, 0, 0, $77, 0, 1, $87, 0 ; $11 i vertical
+        .byte    0, $78,-2, 0, $79,-1, 0, $79, 0, 0, $7A, 1 ; $12 i horizontal (spawn)
 
         ; Hidden orientation used during line clear animation and game over curtain
         .byte    0, tileHidden, 0, 0, tileHidden, 0, 0, tileHidden, 0, 0, tileHidden, 0 ; $13
