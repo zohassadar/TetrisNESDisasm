@@ -1437,8 +1437,8 @@ endTypeBInit:
 typeBBlankInitCountByHeightTable:
         .byte   $C8,$AA,$96,$78,$64,$50
 rngTable:
-        .byte   tileEmpty,tile1,tileEmpty,tile2
-        .byte   tile3,tile3,tileEmpty,tileEmpty
+        .byte  $81,$81,$81,$81
+        .byte  $81,$81,$81,$81
 gameModeState_updateCountersAndNonPlayerState:
         lda     #CHR_GAME
         jsr     changeCHRBank0
