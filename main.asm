@@ -540,7 +540,8 @@ gameMode_legalScreen:
         ldy     #>oamStaging
         jsr     memset_page
 .if NWC <> 1
-        lda     #LEGAL_SLEEP_TIME
+        ;lda     #LEGAL_SLEEP_TIME
+        lda     #0
         jsr     sleep_for_a_vblanks
         lda     #LEGAL_SLEEP_TIME
         sta     generalCounter
@@ -1758,31 +1759,32 @@ stageSpriteForCurrentPiece:
 
 orientationTable:
         ; y offset, tile ID, x offset per mino per orientation
-        .byte    0, tile1,-1, 0, tile1, 0, 0, tile1, 1,-1, tile1, 0 ; $00 t up
-        .byte   -1, tile1, 0, 0, tile1, 0, 0, tile1, 1, 1, tile1, 0 ; $01 t right
-        .byte    0, tile1,-1, 0, tile1, 0, 0, tile1, 1, 1, tile1, 0 ; $02 t down (spawn)
-        .byte   -1, tile1, 0, 0, tile1,-1, 0, tile1, 0, 1, tile1, 0 ; $03 t left
 
-        .byte   -1, tile3, 0, 0, tile3, 0, 1, tile3,-1, 1, tile3, 0 ; $04 j left
-        .byte   -1, tile3,-1, 0, tile3,-1, 0, tile3, 0, 0, tile3, 1 ; $05 j up
-        .byte   -1, tile3, 0,-1, tile3, 1, 0, tile3, 0, 1, tile3, 0 ; $06 j right
-        .byte    0, tile3,-1, 0, tile3, 0, 0, tile3, 1, 1, tile3, 1 ; $07 j down (spawn)
+        .byte    0, $CE,-1, 0, $C6, 0, 0, $C2, 1,-1, $C3, 0 ; $00 t up
+        .byte   -1, $C3, 0, 0, $C7, 0, 0, $C2, 1, 1, $C5, 0 ; $01 t right
+        .byte    0, $C0,-1, 0, $C8, 0, 0, $C2, 1, 1, $C5, 0 ; $02 t down (spawn)
+        .byte   -1, $C3, 0, 0, $CE,-1, 0, $C9, 0, 1, $C5, 0 ; $03 t left
 
-        .byte    0, tile2,-1, 0, tile2, 0, 1, tile2, 0, 1, tile2, 1 ; $08 z horizontal (spawn)
-        .byte   -1, tile2, 1, 0, tile2, 0, 0, tile2, 1, 1, tile2, 0 ; $09 z vertical
+        .byte   -1, $E3, 0, 0, $E4, 0, 1, $EE,-1, 1, $ED, 0 ; $04 j left
+        .byte   -1, $E3,-1, 0, $EC,-1, 0, $E1, 0, 0, $E2, 1 ; $05 j up
+        .byte   -1, $E9, 0,-1, $E2, 1, 0, $E4, 0, 1, $E5, 0 ; $06 j right
+        .byte    0, $E0,-1, 0, $E1, 0, 0, $EB, 1, 1, $E5, 1 ; $07 j down (spawn)
 
-        .byte    0, tile1,-1, 0, tile1, 0, 1, tile1,-1, 1, tile1, 0 ; $0A o (spawn)
+        .byte    0, $D0,-1, 0, $DB, 0, 1, $DC, 0, 1, $D2, 1 ; $08 z horizontal (spawn)
+        .byte   -1, $D3, 1, 0, $DA, 0, 0, $DD, 1, 1, $D5, 0 ; $09 z vertical
 
-        .byte    0, tile3, 0, 0, tile3, 1, 1, tile3,-1, 1, tile3, 0 ; $0B s horizontal (spawn)
-        .byte   -1, tile3, 0, 0, tile3, 0, 0, tile3, 1, 1, tile3, 1 ; $0C s vertical
+        .byte    0, $CA,-1, 0, $CB, 0, 1, $CC,-1, 1, $CD, 0 ; $0A o (spawn)
 
-        .byte   -1, tile2, 0, 0, tile2, 0, 1, tile2, 0, 1, tile2, 1 ; $0D l right
-        .byte    0, tile2,-1, 0, tile2, 0, 0, tile2, 1, 1, tile2,-1 ; $0E l down (spawn)
-        .byte   -1, tile2,-1,-1, tile2, 0, 0, tile2, 0, 1, tile2, 0 ; $0F l left
-        .byte   -1, tile2, 1, 0, tile2,-1, 0, tile2, 0, 0, tile2, 1 ; $10 l up
+        .byte    0, $E9, 0, 0, $E2, 1, 1, $EE,-1, 1, $ED, 0 ; $0B s horizontal (spawn)
+        .byte   -1, $E3, 0, 0, $EC, 0, 0, $EB, 1, 1, $E5, 1 ; $0C s vertical
 
-        .byte   -2, tile1, 0,-1, tile1, 0, 0, tile1, 0, 1, tile1, 0 ; $11 i vertical
-        .byte    0, tile1,-2, 0, tile1,-1, 0, tile1, 0, 0, tile1, 1 ; $12 i horizontal (spawn)
+        .byte   -1, $D3, 0, 0, $D4, 0, 1, $DC, 0, 1, $D2, 1 ; $0D l right
+        .byte    0, $D9,-1, 0, $D1, 0, 0, $D2, 1, 1, $D5,-1 ; $0E l down (spawn)
+        .byte   -1, $D0,-1,-1, $DB, 0, 0, $D4, 0, 1, $D5, 0 ; $0F l left
+        .byte   -1, $D3, 1, 0, $D0,-1, 0, $D1, 0, 0, $DD, 1 ; $10 l up
+
+        .byte   -2, $C3, 0,-1, $C4, 0, 0, $C4, 0, 1, $C5, 0 ; $11 i vertical
+        .byte    0, $C0,-2, 0, $C1,-1, 0, $C1, 0, 0, $C2, 1 ; $12 i horizontal (spawn)
 
         ; Hidden orientation used during line clear animation and game over curtain
         .byte    0, tileHidden, 0, 0, tileHidden, 0, 0, tileHidden, 0, 0, tileHidden, 0 ; $13
@@ -2012,32 +2014,32 @@ sprite05PausePalette4:
         .byte   $00,$1E,$00,$10,$00,$1C,$00,$18
         .byte   $00,$0E,$00,$20,$FF
 sprite06TPiece:
-        .byte   $00,$7B,$02,$FC,$00,$7B,$02,$04
-        .byte   $00,$7B,$02,$0C,$08,$7B,$02,$04
+        .byte   $00,$C0,$02,$FC,$00,$C8,$02,$04
+        .byte   $00,$C2,$02,$0C,$08,$C5,$02,$04
         .byte   $FF
 sprite07SPiece:
-        .byte   $00,$7D,$02,$04,$00,$7D,$02,$0C
-        .byte   $08,$7D,$02,$FC,$08,$7D,$02,$04
+        .byte   $00,$E9,$02,$04,$00,$E2,$02,$0C
+        .byte   $08,$EE,$02,$FC,$08,$ED,$02,$04
         .byte   $FF
 sprite08ZPiece:
-        .byte   $00,$7C,$02,$FC,$00,$7C,$02,$04
-        .byte   $08,$7C,$02,$04,$08,$7C,$02,$0C
+        .byte   $00,$D0,$02,$FC,$00,$DB,$02,$04
+        .byte   $08,$DC,$02,$04,$08,$D2,$02,$0C
         .byte   $FF
 sprite09JPiece:
-        .byte   $00,$7D,$02,$FC,$00,$7D,$02,$04
-        .byte   $00,$7D,$02,$0C,$08,$7D,$02,$0C
+        .byte   $00,$E0,$02,$FC,$00,$E1,$02,$04
+        .byte   $00,$EB,$02,$0C,$08,$E5,$02,$0C
         .byte   $FF
 sprite0ALPiece:
-        .byte   $00,$7C,$02,$FC,$00,$7C,$02,$04
-        .byte   $00,$7C,$02,$0C,$08,$7C,$02,$FC
+        .byte   $00,$D9,$02,$FC,$00,$D1,$02,$04
+        .byte   $00,$D2,$02,$0C,$08,$D5,$02,$FC
         .byte   $FF
 sprite0BOPiece:
-        .byte   $00,$7B,$02,$00,$00,$7B,$02,$08
-        .byte   $08,$7B,$02,$00,$08,$7B,$02,$08
+        .byte   $00,$CA,$02,$00,$00,$CB,$02,$08
+        .byte   $08,$CC,$02,$00,$08,$CD,$02,$08
         .byte   $FF
 sprite0CIPiece:
-        .byte   $04,$7B,$02,$F8,$04,$7B,$02,$00
-        .byte   $04,$7B,$02,$08,$04,$7B,$02,$10
+        .byte   $04,$C0,$02,$F8,$04,$C1,$02,$00
+        .byte   $04,$C1,$02,$08,$04,$C2,$02,$10
         .byte   $FF
 sprite0EHighScoreNameCursor:
         .byte   $00,$FC,$21,$00,$FF
@@ -2847,17 +2849,19 @@ updatePaletteForLevel:
 @copyPalette:
         lda     #$3F
         sta     PPUADDR
-        lda     #$08
+        lda     #$09
         clc
         adc     generalCounter
         sta     PPUADDR
-        lda     colorTable,x
-        sta     PPUDATA
+        ;lda     colorTable,x
+        ;sta     PPUDATA
         lda     colorTable+1,x
         sta     PPUDATA
         lda     colorTable+1+1,x
         sta     PPUDATA
         lda     colorTable+1+1+1,x
+        sta     PPUDATA
+        sta     PPUDATA
         sta     PPUDATA
         lda     generalCounter
         clc
