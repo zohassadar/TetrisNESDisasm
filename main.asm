@@ -540,7 +540,8 @@ gameMode_legalScreen:
         ldy     #>oamStaging
         jsr     memset_page
 .if NWC <> 1
-        lda     #$0
+        ;lda     #LEGAL_SLEEP_TIME
+        lda     #0
         jsr     sleep_for_a_vblanks
         lda     #LEGAL_SLEEP_TIME
         sta     generalCounter
@@ -2012,32 +2013,32 @@ sprite05PausePalette4:
         .byte   $00,$1E,$00,$10,$00,$1C,$00,$18
         .byte   $00,$0E,$00,$20,$FF
 sprite06TPiece:
-        .byte   $00,$7B,$02,$FC,$00,$7B,$02,$04
-        .byte   $00,$7B,$02,$0C,$08,$7B,$02,$04
+        .byte   $00,$C0,$02,$FC,$00,$C8,$02,$04
+        .byte   $00,$C2,$02,$0C,$08,$C5,$02,$04
         .byte   $FF
 sprite07SPiece:
-        .byte   $00,$7D,$02,$04,$00,$7D,$02,$0C
-        .byte   $08,$7D,$02,$FC,$08,$7D,$02,$04
+        .byte   $00,$E9,$02,$04,$00,$E2,$02,$0C
+        .byte   $08,$EE,$02,$FC,$08,$ED,$02,$04
         .byte   $FF
 sprite08ZPiece:
-        .byte   $00,$7C,$02,$FC,$00,$7C,$02,$04
-        .byte   $08,$7C,$02,$04,$08,$7C,$02,$0C
+        .byte   $00,$D0,$02,$FC,$00,$DB,$02,$04
+        .byte   $08,$DC,$02,$04,$08,$D2,$02,$0C
         .byte   $FF
 sprite09JPiece:
-        .byte   $00,$7D,$02,$FC,$00,$7D,$02,$04
-        .byte   $00,$7D,$02,$0C,$08,$7D,$02,$0C
+        .byte   $00,$E0,$02,$FC,$00,$E1,$02,$04
+        .byte   $00,$EB,$02,$0C,$08,$E5,$02,$0C
         .byte   $FF
 sprite0ALPiece:
-        .byte   $00,$7C,$02,$FC,$00,$7C,$02,$04
-        .byte   $00,$7C,$02,$0C,$08,$7C,$02,$FC
+        .byte   $00,$D9,$02,$FC,$00,$D1,$02,$04
+        .byte   $00,$D2,$02,$0C,$08,$D5,$02,$FC
         .byte   $FF
 sprite0BOPiece:
-        .byte   $00,$7B,$02,$00,$00,$7B,$02,$08
-        .byte   $08,$7B,$02,$00,$08,$7B,$02,$08
+        .byte   $00,$CA,$02,$00,$00,$CB,$02,$08
+        .byte   $08,$CC,$02,$00,$08,$CD,$02,$08
         .byte   $FF
 sprite0CIPiece:
-        .byte   $04,$7B,$02,$F8,$04,$7B,$02,$00
-        .byte   $04,$7B,$02,$08,$04,$7B,$02,$10
+        .byte   $04,$C0,$02,$F8,$04,$C1,$02,$00
+        .byte   $04,$C1,$02,$08,$04,$C2,$02,$10
         .byte   $FF
 sprite0EHighScoreNameCursor:
         .byte   $00,$FC,$21,$00,$FF
