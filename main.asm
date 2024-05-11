@@ -540,7 +540,8 @@ gameMode_legalScreen:
         ldy     #>oamStaging
         jsr     memset_page
 .if NWC <> 1
-        lda     #LEGAL_SLEEP_TIME
+        ;lda     #LEGAL_SLEEP_TIME
+        lda     #$0
         jsr     sleep_for_a_vblanks
         lda     #LEGAL_SLEEP_TIME
         sta     generalCounter
@@ -2847,17 +2848,19 @@ updatePaletteForLevel:
 @copyPalette:
         lda     #$3F
         sta     PPUADDR
-        lda     #$08
+        lda     #$09
         clc
         adc     generalCounter
         sta     PPUADDR
-        lda     colorTable,x
-        sta     PPUDATA
+        ;lda     colorTable,x
+        ;sta     PPUDATA
         lda     colorTable+1,x
         sta     PPUDATA
         lda     colorTable+1+1,x
         sta     PPUDATA
         lda     colorTable+1+1+1,x
+        sta     PPUDATA
+        sta     PPUDATA
         sta     PPUDATA
         lda     generalCounter
         clc
