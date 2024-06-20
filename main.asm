@@ -1501,31 +1501,31 @@ rotate_tetrimino:
 @ret:   rts
 
 rotationTable:
-        .byte   tLeft, tRight  ; from tUp
-        .byte   tUp, tDown     ; from tRight
-        .byte   tRight, tLeft  ; from tDown
-        .byte   tDown, tUp     ; from tLeft
+        .byte   iHoriz, iHoriz ; from iVert
+        .byte   iVert, iVert   ; from iHoriz
 
         .byte   jDown, jUp     ; from jLeft
         .byte   jLeft, jRight  ; from jUp
         .byte   jUp, jDown     ; from jRight
         .byte   jRight, jLeft  ; from jDown
 
-        .byte   zVert, zVert   ; from zHoriz
-        .byte   zHoriz, zHoriz ; from zVert
+        .byte   lUp, lDown     ; from lRight
+        .byte   lRight, lLeft  ; from lDown
+        .byte   lDown, lUp     ; from lLeft
+        .byte   lLeft, lRight  ; from lUp
 
         .byte   oFixed, oFixed ; from oFixed
 
         .byte   sVert, sVert   ; from sHoriz
         .byte   sHoriz, sHoriz ; from sVert
 
-        .byte   lUp, lDown     ; from lRight
-        .byte   lRight, lLeft  ; from lDown
-        .byte   lDown, lUp     ; from lLeft
-        .byte   lLeft, lRight  ; from lUp
+        .byte   tLeft, tRight  ; from tUp
+        .byte   tUp, tDown     ; from tRight
+        .byte   tRight, tLeft  ; from tDown
+        .byte   tDown, tUp     ; from tLeft
 
-        .byte   iHoriz, iHoriz ; from iVert
-        .byte   iVert, iVert   ; from iHoriz
+        .byte   zVert, zVert   ; from zHoriz
+        .byte   zHoriz, zHoriz ; from zVert
 
 drop_tetrimino:
         lda     autorepeatY
@@ -1758,31 +1758,31 @@ stageSpriteForCurrentPiece:
 
 orientationTable:
         ; y offset, tile ID, x offset per mino per orientation
-        .byte    0, tile1,-1, 0, tile1, 0, 0, tile1, 1,-1, tile1, 0 ; $00 t up
-        .byte   -1, tile1, 0, 0, tile1, 0, 0, tile1, 1, 1, tile1, 0 ; $01 t right
-        .byte    0, tile1,-1, 0, tile1, 0, 0, tile1, 1, 1, tile1, 0 ; $02 t down (spawn)
-        .byte   -1, tile1, 0, 0, tile1,-1, 0, tile1, 0, 1, tile1, 0 ; $03 t left
+        .byte   -2, tile1, 0,-1, tile1, 0, 0, tile1, 0, 1, tile1, 0 ; $11 i vertical
+        .byte    0, tile1,-2, 0, tile1,-1, 0, tile1, 0, 0, tile1, 1 ; $12 i horizontal (spawn)
 
         .byte   -1, tile3, 0, 0, tile3, 0, 1, tile3,-1, 1, tile3, 0 ; $04 j left
         .byte   -1, tile3,-1, 0, tile3,-1, 0, tile3, 0, 0, tile3, 1 ; $05 j up
         .byte   -1, tile3, 0,-1, tile3, 1, 0, tile3, 0, 1, tile3, 0 ; $06 j right
         .byte    0, tile3,-1, 0, tile3, 0, 0, tile3, 1, 1, tile3, 1 ; $07 j down (spawn)
 
-        .byte    0, tile2,-1, 0, tile2, 0, 1, tile2, 0, 1, tile2, 1 ; $08 z horizontal (spawn)
-        .byte   -1, tile2, 1, 0, tile2, 0, 0, tile2, 1, 1, tile2, 0 ; $09 z vertical
+        .byte   -1, tile2, 0, 0, tile2, 0, 1, tile2, 0, 1, tile2, 1 ; $0D l right
+        .byte    0, tile2,-1, 0, tile2, 0, 0, tile2, 1, 1, tile2,-1 ; $0E l down (spawn)
+        .byte   -1, tile2,-1,-1, tile2, 0, 0, tile2, 0, 1, tile2, 0 ; $0F l left
+        .byte   -1, tile2, 1, 0, tile2,-1, 0, tile2, 0, 0, tile2, 1 ; $10 l up
 
         .byte    0, tile1,-1, 0, tile1, 0, 1, tile1,-1, 1, tile1, 0 ; $0A o (spawn)
 
         .byte    0, tile3, 0, 0, tile3, 1, 1, tile3,-1, 1, tile3, 0 ; $0B s horizontal (spawn)
         .byte   -1, tile3, 0, 0, tile3, 0, 0, tile3, 1, 1, tile3, 1 ; $0C s vertical
 
-        .byte   -1, tile2, 0, 0, tile2, 0, 1, tile2, 0, 1, tile2, 1 ; $0D l right
-        .byte    0, tile2,-1, 0, tile2, 0, 0, tile2, 1, 1, tile2,-1 ; $0E l down (spawn)
-        .byte   -1, tile2,-1,-1, tile2, 0, 0, tile2, 0, 1, tile2, 0 ; $0F l left
-        .byte   -1, tile2, 1, 0, tile2,-1, 0, tile2, 0, 0, tile2, 1 ; $10 l up
+        .byte    0, tile1,-1, 0, tile1, 0, 0, tile1, 1,-1, tile1, 0 ; $00 t up
+        .byte   -1, tile1, 0, 0, tile1, 0, 0, tile1, 1, 1, tile1, 0 ; $01 t right
+        .byte    0, tile1,-1, 0, tile1, 0, 0, tile1, 1, 1, tile1, 0 ; $02 t down (spawn)
+        .byte   -1, tile1, 0, 0, tile1,-1, 0, tile1, 0, 1, tile1, 0 ; $03 t left
 
-        .byte   -2, tile1, 0,-1, tile1, 0, 0, tile1, 0, 1, tile1, 0 ; $11 i vertical
-        .byte    0, tile1,-2, 0, tile1,-1, 0, tile1, 0, 0, tile1, 1 ; $12 i horizontal (spawn)
+        .byte    0, tile2,-1, 0, tile2, 0, 1, tile2, 0, 1, tile2, 1 ; $08 z horizontal (spawn)
+        .byte   -1, tile2, 1, 0, tile2, 0, 0, tile2, 1, 1, tile2, 0 ; $09 z vertical
 
         ; Hidden orientation used during line clear animation and game over curtain
         .byte    0, tileHidden, 0, 0, tileHidden, 0, 0, tileHidden, 0, 0, tileHidden, 0 ; $13
@@ -1845,9 +1845,13 @@ stageSpriteForNextPiece:
 
 ; Only cares about orientations selected by spawnTable
 orientationToSpriteTable:
-        .byte   $00,$00,$06,$00,$00,$00,$00,$09
-        .byte   $08,$00,$0B,$07,$00,$00,$0A,$00
-        .byte   $00,$00,$0C
+        .byte   $00,$0C ; i
+        .byte   $00,$00,$00,$09 ; j
+        .byte   $00,$0A,$00,$00 ; l
+        .byte   $0B ; o
+        .byte   $07,$00 ; s
+        .byte   $00,$00,$06,$00 ; t
+        .byte   $08,$00 ; z
 ; Same as orientationToSpriteTable except sprites have different offsets
 unreferenced_orientationToSpriteTable:
         .byte   $00,$00,$0F,$00,$00,$00,$00,$12
@@ -3003,15 +3007,21 @@ useNewSpawnID:
         rts
 
 tetriminoTypeFromOrientation:
-        .byte   tPiece, tPiece, tPiece, tPiece
+        .byte   iPiece, iPiece
         .byte   jPiece, jPiece, jPiece, jPiece
-        .byte   zPiece, zPiece
+        .byte   lPiece, lPiece, lPiece, lPiece
         .byte   oPiece
         .byte   sPiece, sPiece
-        .byte   lPiece, lPiece, lPiece, lPiece
-        .byte   iPiece, iPiece
+        .byte   tPiece, tPiece, tPiece, tPiece
+        .byte   zPiece, zPiece
 spawnTable:
-        .byte   tDown, jDown, zHoriz, oFixed, sHoriz, lDown, iHoriz
+        .byte   iHoriz
+        .byte   jDown
+        .byte   lDown
+        .byte   oFixed
+        .byte   sHoriz
+        .byte   tDown
+        .byte   zHoriz
 ; unused portion of spawnTable:
 .if NWC = 1
         .byte   $12
@@ -3019,13 +3029,13 @@ spawnTable:
         .byte   $02
 .endif
 spawnOrientationFromOrientation:
-        .byte   tDown, tDown, tDown, tDown
+        .byte   iHoriz, iHoriz
         .byte   jDown, jDown, jDown, jDown
-        .byte   zHoriz, zHoriz
+        .byte   lDown, lDown, lDown, lDown
         .byte   oFixed
         .byte   sHoriz, sHoriz
-        .byte   lDown, lDown, lDown, lDown
-        .byte   iHoriz, iHoriz
+        .byte   tDown, tDown, tDown, tDown
+        .byte   zHoriz, zHoriz
 
 incrementPieceStat:
         tax

@@ -109,32 +109,39 @@ tileEmpty = $EF ; blank tile used for empty squares
 tileHidden = $FF ; blank tile used to hide minos
 
 ; Piece IDs
-tPiece = $00
+iPiece = $00
 jPiece = $01
-zPiece = $02
+lPiece = $02
 oPiece = $03
 sPiece = $04
-lPiece = $05
-iPiece = $06
+tPiece = $05
+zPiece = $06
 
 ; Orientations
-tUp    = $00
-tRight = $01
-tDown  = $02
-tLeft  = $03
-jLeft  = $04
-jUp    = $05
-jRight = $06
-jDown  = $07
-zHoriz = $08
-zVert  = $09
+iVert  = $00
+iHoriz = $01
+
+jLeft  = $02
+jUp    = $03
+jRight = $04
+jDown  = $05
+
+lRight = $06
+lDown  = $07
+lLeft  = $08
+lUp    = $09
+
 oFixed = $0A
+
 sHoriz = $0B
 sVert  = $0C
-lRight = $0D
-lDown  = $0E
-lLeft  = $0F
-lUp    = $10
-iVert  = $11
-iHoriz = $12
+
+tUp    = $0D
+tRight = $0E
+tDown  = $0F
+tLeft  = $10
+
+zHoriz = $11
+zVert  = $12
+
 hidden = $13
