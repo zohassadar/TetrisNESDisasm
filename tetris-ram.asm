@@ -2,7 +2,7 @@
 tmp1:	.res 1	; $0000
 tmp2:	.res 1	; $0001
 tmp3:	.res 1	; $0002
-.res 2 
+.res 2
 tmpBulkCopyToPpuReturnAddr: .res 1 ; $0005
 .res 14
 patchToPpuAddr: .res 1             ; $0014
@@ -13,7 +13,9 @@ spawnCount:	.res 1	; $001A
 .res 24
 verticalBlankingInterval:	.res 1	; $0033
 unused_0E: .res 1 ; $0034
-.res 11
+romSource: .res 2 ; $0035
+pieceIndex: .res 1 ; $0037
+.res 8
 tetriminoX:	.res 1	; $0040
 tetriminoY:	.res 1	; $0041
 currentPiece:	.res 1	; $0042
@@ -164,7 +166,8 @@ currentPpuCtrl:	.res 1	; $00FF
 stack:	.res $FF	; $0100
 .res 1
 oamStaging:	.res $100	; $0200
-.res 240
+stagedPieces: .res $8 ; $0300
+.res 232
 statsByType:	.res $0E	; $03F0
 .res 2
 playfield:	.res $C8	; $0400

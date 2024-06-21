@@ -463,7 +463,7 @@ gameMode_playAndEndingHighScore:
         lda     gameModeState
         jsr     switch_s_plus_2a
         .addr   gameModeState_initGameBackground
-        .addr   gameModeState_initGameState
+        .addr   initRomAddress
         .addr   gameModeState_updateCountersAndNonPlayerState
         .addr   gameModeState_handleGameOver
         .addr   gameModeState_updatePlayer1
@@ -2945,7 +2945,7 @@ playState_spawnNextTetrimino:
         sta     autorepeatY
 @ret:   rts
 
-chooseNextTetrimino:
+chooseNextTetriminoDead:
         lda     gameMode
         cmp     #$05
         bne     pickRandomTetrimino
