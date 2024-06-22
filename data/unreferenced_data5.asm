@@ -32,12 +32,37 @@ stagedPieces := $0300
 
 initRomAddress:
     lda frameCounter+1
+.ifdef DEBUG
+    lda #<testData
+.endif
     sta romSource
     lda frameCounter
     ora #$80
+.ifdef DEBUG
+    lda #>testData
+.endif
     sta romSource+1
     jsr setupNewStagedPieces
     jmp gameModeState_initGameState
+
+.ifdef DEBUG
+testData:
+    .byte %00011100
+    .byte %01110001
+    .byte %11000111 ; 07070707
+
+    .byte %11100011
+    .byte %10001110
+    .byte %00111000 ; 70707070
+
+    .byte %00000101
+    .byte %00111001
+    .byte %01110111 ; 01234567
+
+    .byte %11111010
+    .byte %11000110
+    .byte %10001000 ; 76543210
+.endif
 
 chooseNextTetrimino:
     ldx pieceIndex
@@ -82,7 +107,7 @@ setupNewStagedPieces:
     lsr
     lsr
     and #$7
-    sta stagedPieces+5
+    sta stagedPieces+4
     pla
     and #$7
     sta stagedPieces+3
